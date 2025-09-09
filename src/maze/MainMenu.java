@@ -9,13 +9,161 @@ program upon clicking.
 */
 package maze;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Rectangle;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 public class MainMenu extends javax.swing.JFrame {
     public static String mcharacter;
+
+    private JButton jButton1;
+    private JButton jButton2;
+    private JComboBox<String> jComboBox1;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel4;
+
     public MainMenu() {
-        initComponents();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Maze Game");
+        setBounds(new Rectangle(0, 0, 0, 0));
+        setMaximumSize(new Dimension(600, 600));
+        setMinimumSize(new Dimension(465, 488));
+        setSize(new Dimension(465, 488));
+        setLayout(null);
+
+        // Title label
+        jLabel2 = new JLabel("Tron Dungeon", SwingConstants.CENTER);
+        jLabel2.setFont(new Font("Lucida Console", Font.BOLD, 18));
+        jLabel2.setForeground(Color.WHITE);
+        jLabel2.setOpaque(true);
+        jLabel2.setBackground(new Color(0, 0, 51));
+        jLabel2.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        jLabel2.setBounds(152, 60, 160, 24);
+        add(jLabel2);
+
+        // Character select label
+        jLabel1 = new JLabel("Select your character", SwingConstants.CENTER);
+        jLabel1.setFont(new Font("Lucida Console", Font.PLAIN, 14));
+        jLabel1.setForeground(Color.WHITE);
+        jLabel1.setOpaque(true);
+        jLabel1.setBackground(new Color(0, 0, 51));
+        jLabel1.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        jLabel1.setBounds(132, 100, 200, 20);
+        add(jLabel1);
+
+        // Combo box
+        jComboBox1 = new JComboBox<>(new String[]{"Skeleton", "Warrior", "Knight", "Archer"});
+        jComboBox1.setBounds(182, 140, 100, 24);
+        jComboBox1.addActionListener(evt -> {
+            String item = (String) jComboBox1.getSelectedItem();
+            switch (item) {
+                case "Skeleton": mcharacter = "w"; break;
+                case "Warrior": mcharacter = "o"; break;
+                case "Knight": mcharacter = "b"; break;
+                case "Archer": mcharacter = "g"; break;
+            }
+        });
+        add(jComboBox1);
+
+        // Start button
+        jButton1 = new JButton("Start");
+        jButton1.setBounds(102, 300, 120, 28);
+        jButton1.setFont(new Font("Press Start 2P", Font.PLAIN, 12));
+        jButton1.setBackground(Color.BLACK);
+        jButton1.setForeground(Color.WHITE);
+        jButton1.setFocusPainted(false);
+        jButton1.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+        jButton1.setOpaque(true);
+
+        jButton1.addActionListener(evt -> {
+            if ("w".equals(mcharacter)) {
+                openMazeWindow(new Maze(), new MyPanel());
+            } else if ("o".equals(mcharacter)) {
+                openMazeWindow(new Maze2(), new MyPanel2());
+            } else if ("b".equals(mcharacter)) {
+                openMazeWindow(new Maze3(), new MyPanel3());
+            } else if ("g".equals(mcharacter)) {
+                openMazeWindow(new Maze4(), new MyPanel4());
+            } else {
+                openMazeWindow(new Maze(), new MyPanel());
+            }
+            dispose();
+        });
+
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton1.setBackground(new Color(51, 255, 51));
+                jButton1.setForeground(Color.BLACK);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton1.setBackground(Color.BLACK);
+                jButton1.setForeground(Color.WHITE);
+            }
+        });
+        add(jButton1);
+
+        // Exit button
+        jButton2 = new JButton("Exit");
+        jButton2.setBounds(242, 300, 120, 28);
+        jButton2.setFont(new Font("Press Start 2P", Font.PLAIN, 12));
+        jButton2.setBackground(Color.BLACK);
+        jButton2.setForeground(Color.WHITE);
+        jButton2.setFocusPainted(false);
+        jButton2.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+        jButton2.setOpaque(true);
+
+        jButton2.addActionListener(evt -> dispose());
+
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButton2.setBackground(new Color(255, 51, 51));
+                jButton2.setForeground(Color.BLACK);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jButton2.setBackground(Color.BLACK);
+                jButton2.setForeground(Color.WHITE);
+            }
+        });
+        add(jButton2);
+
+        // Background image (dynamic resize)
+        ImageIcon bgIcon = new ImageIcon(getClass().getResource("/maze/tron light wall.png"));
+        Image scaledImg = bgIcon.getImage().getScaledInstance(465, 488, Image.SCALE_SMOOTH);
+        jLabel4 = new JLabel(new ImageIcon(scaledImg));
+        jLabel4.setBounds(0, 0, 465, 488);
+        add(jLabel4);
+
+        setLocationRelativeTo(null);
+    }
+
+    private void openMazeWindow(JFrame frame, JPanel panel) {
+        frame.setTitle("Main Menu");
+        frame.add(panel);
+        frame.setSize(465, 488);
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    // 🔹 Your version of main
+    public static void main(String[] args) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainMenu().setVisible(true);
+            }
+        });
     }
 
     /**
@@ -33,12 +181,6 @@ public class MainMenu extends javax.swing.JFrame {
         jToggleButton1 = new javax.swing.JToggleButton();
         jPanel1 = new javax.swing.JPanel();
         jToggleButton2 = new javax.swing.JToggleButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -70,136 +212,13 @@ public class MainMenu extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(350, 350));
         getContentPane().setLayout(null);
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 51));
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Select your character");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        jLabel1.setOpaque(true);
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(70, 70, 160, 19);
-
-        jLabel2.setBackground(new java.awt.Color(0, 0, 51));
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("Welcome to the maze game");
-        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        jLabel2.setOpaque(true);
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
-            }
-        });
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(30, 30, 240, 24);
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "White", "Orange", "Blue", "Green" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jComboBox1);
-        jComboBox1.setBounds(111, 110, 80, 20);
-
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Start");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(40, 200, 80, 28);
-
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setText("Exit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton2);
-        jButton2.setBounds(180, 200, 80, 28);
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/maze/tron light wall.png"))); // NOI18N
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(0, 0, 300, 300);
-
         setSize(new java.awt.Dimension(316, 339));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        String item = (String)jComboBox1.getSelectedItem();
-        if(item == "White"){
-            mcharacter = "w";
-        }
-        if(item == "Orange"){
-            mcharacter = "o";
-        }
-        if(item == "Blue"){
-            mcharacter = "b";
-        }
-        if(item == "Green"){
-            mcharacter = "g";
-        }
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-
-    }//GEN-LAST:event_jLabel2MouseClicked
-
-    private void openMazeWindow(JFrame frame, JPanel panel) {
-        frame.setTitle("Main Menu");
-        frame.add(panel);
-        frame.setSize(465, 488);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-    }
     
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        //openMazeWindow(new Maze(), new MyPanel());
-        if ("w".equals(mcharacter)){
-            openMazeWindow(new Maze(), new MyPanel());
-        } else if ("o".equals(mcharacter)) {
-            openMazeWindow(new Maze2(), new MyPanel2());
-        } else if ("b".equals(mcharacter)) {
-            openMazeWindow(new Maze3(), new MyPanel3());
-        } else if ("g".equals(mcharacter)) {
-            openMazeWindow(new Maze4(), new MyPanel4());
-        } else {
-            openMazeWindow(new Maze(), new MyPanel());
-        }
-
-        this.dispose();
-        this.setDefaultCloseOperation(MainMenu.EXIT_ON_CLOSE);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-	this.dispose();
-        this.setDefaultCloseOperation(MainMenu.EXIT_ON_CLOSE);
-    }//GEN-LAST:event_jButton2ActionPerformed
-    
-    public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainMenu().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
